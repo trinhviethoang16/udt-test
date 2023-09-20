@@ -1,0 +1,29 @@
+@startuml testERD
+
+skinparam linetype ortho
+
+entity User {
+    *id: ObjectId <<generated>>
+    --
+    *firstName: String
+    *lastName: String
+    *email: String
+    *password: String
+    *isAdmin:Boolean = false
+}
+
+entity Figure {
+    *id: ObjectId <<generated>>
+    --
+    *user_id: ObjectId <<FK>>   
+    --
+    *shape: String
+    *color: String
+    *symbol: String
+    *measurement: Number
+    
+}
+
+User ||--|{ Figure
+
+@enduml
