@@ -122,7 +122,7 @@ const CreateNew = () => {
         </div>
       );
     } else if (shape === "Diamond") {
-      const height = formData.measurement;
+      const height = (formData.measurement / 2) + 2;
       const color = "#" + formData.color;
       const symbol = formData.symbol.toString();
       
