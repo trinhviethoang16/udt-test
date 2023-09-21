@@ -89,7 +89,7 @@ export default function Home() {
               </button>
             </div>
             <p style={{ textAlign: 'center' }}>
-              <span className="text">You don't have an account? </span>
+              <span className="text">You dont have an account? </span>
               <Link href="/signup">
                 <span className="blue-text"> Sign Up</span>
               </Link>

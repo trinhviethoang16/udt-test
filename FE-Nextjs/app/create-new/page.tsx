@@ -58,23 +58,24 @@ const CreateNew = () => {
   };
 
   const drawFigure = () => {
-    const shape = formData.shape;
-    if (shape === "Rectangle") {
-      const width = 5;
-      const height = formData.measurement;
-      const color = "#" + formData.color;
-      const symbol = formData.symbol.toString();
+    if (formData.shape === "Rectangle") {
+      let side = formData.measurement;
+      let color = "#" + formData.color;
+      let symbol = formData.symbol.toString();
         const rectangle = {
-        width,
-        height,
+        side,
         color,
         symbol,
       };
   
       const rows = [];
-      for (let i = 0; i < rectangle.height; i++) {
-        const row = Array(rectangle.width).fill(rectangle.symbol).join('');
-        rows.push(row);
+      var starts = '';
+      for(let i = 1; i <= rectangle.side; i++) {
+        for(let j = 1; j <= rectangle.side; j++) {
+          starts += `${rectangle.symbol}`;
+        }
+        rows.push(starts);
+        starts = '';
       }
   
       return (
@@ -90,7 +91,7 @@ const CreateNew = () => {
           ))}
         </div>
       );
-    } else if (shape === "Perfect Triangle") {
+    } else if (formData.shape === "Perfect Triangle") {
       const height = formData.measurement;
       const color = "#" + formData.color;
       const symbol = formData.symbol.toString();
@@ -102,12 +103,15 @@ const CreateNew = () => {
       };
     
       const rows = [];
-      for (let i = 1; i <= triangle.height; i++) {
-        const spaces = ' '.repeat(triangle.height - i);
-        const stars = triangle.symbol.repeat(i * 2 - 1);
-        rows.push(spaces + stars);
+      var starts = '';
+      for(let i = 1; i <= triangle.height; i++) {
+        for (let j = 1; j <= i*2-1; j++) {
+          starts += `${triangle.symbol}`;
+        }
+        rows.push(starts);
+        starts = '';
       }
-    
+
       return (
         <div
           style={{
@@ -121,8 +125,8 @@ const CreateNew = () => {
           ))}
         </div>
       );
-    } else if (shape === "Diamond") {
-      const height = (formData.measurement / 2) + 2;
+    } else if (formData.shape === "Diamond") {
+      const height = formData.measurement;
       const color = "#" + formData.color;
       const symbol = formData.symbol.toString();
       
@@ -133,16 +137,37 @@ const CreateNew = () => {
       };
     
       const rows = [];
-      for (let i = 1; i <= diamond.height; i++) {
-        const spaces = ' '.repeat(Math.abs(diamond.height - i));
-        const stars = diamond.symbol.repeat(2 * i - 1);
-        rows.push(spaces + stars);
-      }
-    
-      for (let i = diamond.height - 1; i >= 1; i--) {
-        const spaces = ' '.repeat(Math.abs(diamond.height - i));
-        const stars = diamond.symbol.repeat(2 * i - 1);
-        rows.push(spaces + stars);
+      var starts = '';
+      if(height%2 == 1) {
+        for(let i = 1; i <= (diamond.height/2) + 1; i++) {
+          for (let j = 1; j <= i*2-1; j++) {
+            starts += `${diamond.symbol}`;
+          }
+          rows.push(starts);
+          starts = '';
+        }
+        for(let i = diamond.height/2; i >= 1; i--) {
+          for (let j = 1; j < i*2-1; j++) {
+            starts += `${diamond.symbol}`;
+          }
+          rows.push(starts);
+          starts = '';
+        }
+      } else {
+        for(let i = 1; i <= diamond.height/2; i++) {
+          for (let j = 1; j <= i*2-1; j++) {
+            starts += `${diamond.symbol}`;
+          }
+          rows.push(starts);
+          starts = '';
+        }
+        for(let i = diamond.height/2; i >= 1; i--) {
+          for (let j = 1; j <= i*2-1; j++) {
+            starts += `${diamond.symbol}`;
+          }
+          rows.push(starts);
+          starts = '';
+        }
       }
     
       return (
