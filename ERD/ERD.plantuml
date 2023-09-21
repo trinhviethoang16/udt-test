@@ -9,7 +9,13 @@ entity User {
     *lastName: String
     *email: String
     *password: String
-    *isAdmin:Boolean = false
+    role:Role
+}
+
+enum Role {
+    Admin
+    Customer
+    Agency
 }
 
 entity Figure {
@@ -21,9 +27,9 @@ entity Figure {
     *color: String
     *symbol: String
     *measurement: Number
-    
 }
 
 User ||--|{ Figure
+User }|--|| Role
 
 @enduml
