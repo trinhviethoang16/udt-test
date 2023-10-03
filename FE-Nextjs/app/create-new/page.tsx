@@ -1,14 +1,18 @@
 "use client";
 import Link from "next/link";
 import React, { ChangeEvent, FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
+import Figure from "../components/figure";
+
+enum Shape {
+  RECTANGLE = "Rectangle",
+  PERFECT_TRIANGLE = "Perfect Triangle",
+  DIAMOND = "Diamond",
+}
 
 const CreateNew = () => {
-  const router = useRouter();
-
-  const [selectedShape, setSelectedShape] = useState("");
+  const [selectedShape, setSelectedShape] = useState<Shape | "" | undefined>("");
   const handleShapeChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
+    const value = e.target.value as Shape;
     setSelectedShape(value);
 
     setFormData({
@@ -22,7 +26,6 @@ const CreateNew = () => {
     color: "",
     symbol: "",
     measurement: 0,
-    // user_id: '',
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +49,6 @@ const CreateNew = () => {
       });
       if (!response.ok) {
         console.error("Draw fail");
-        //alert(`Shape: ${selectedShape}, Color: ${formData.color}, Symbol: ${formData.symbol}, Measurement: ${formData.measurement}`)
       } else {
         alert("Draw successful !!!");
       }
@@ -55,120 +57,54 @@ const CreateNew = () => {
     }
   };
 
-  const drawFigure = () => {
+  function drawFigure() {
     let color = "#" + formData.color;
     let symbol = formData.symbol.toString();
     let height = formData.measurement;
     let shape = formData.shape;
-    var figure = [];
-    var rowOfFigure = "";
-    if (shape === "Rectangle") { //rectangle creation logic
-      let numRows = height;
-      let numCols = height;
-      for (let row = 1; row <= numRows; row++) {
-        for (let col = 1; col <= numCols; col++) {
-          rowOfFigure += `${symbol}`;
-        }
-        figure.push(rowOfFigure);
-        rowOfFigure = "";
-      }
-
+    let figures = [];
+    if (shape === Shape.RECTANGLE) {
+      figures = Array.from({ length: height }, () => {
+        return Array.from({ length: height }, () => symbol).join('');
+      });
       return (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          {figure.map((row, index) => (
-            <div
-              style={{ color: color, backgroundColor: "transparent" }}
-              key={index}
-            >
-              {row}
-            </div>
-          ))}
-        </div>
+        <Figure figures={figures} color={color} />
       );
-    } else if (shape === "Perfect Triangle") { //triangle creation logic
-      let numRows = height;
-      for (let row = 1; row <= numRows; row++) {
-        for (let col = 1; col <= row * 2 - 1; col++) {
-          rowOfFigure += `${symbol}`;
-        }
-        figure.push(rowOfFigure);
-        rowOfFigure = "";
-      }
-
+    } else if (shape === Shape.PERFECT_TRIANGLE) {
+      figures = Array.from({ length: height }, (_, rowIndex) => {
+        const numCols = rowIndex * 2 + 1;
+        const row = Array.from({ length: numCols }, () => symbol).join('');
+        return row;
+      });
       return (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          {figure.map((row, index) => (
-            <div
-              style={{ color: color, backgroundColor: "transparent" }}
-              key={index}
-            >
-              {row}
-            </div>
-          ))}
-        </div>
+        <Figure figures={figures} color={color} />
       );
-    } else if (shape === "Diamond") { //diamond creation logic
-      if (height % 2 == 1) {
-        for (let numRowTop = 1; numRowTop <= height / 2 + 1; numRowTop++) {
-          for (let colNumTop = 1; colNumTop <= numRowTop * 2 - 1; colNumTop++) {
-            rowOfFigure += `${symbol}`;
-          }
-          figure.push(rowOfFigure);
-          rowOfFigure = "";
-        }
-        for (let rowNumBottom = height / 2; rowNumBottom >= 1; rowNumBottom--) {
-          for (let colNumBottom = 1; colNumBottom < rowNumBottom * 2 - 1; colNumBottom++) {
-            rowOfFigure += `${symbol}`;
-          }
-          figure.push(rowOfFigure);
-          rowOfFigure = "";
-        }
-      } else {
-        for (let rowNumTop = 1; rowNumTop <= height / 2; rowNumTop++) {
-          for (let colNumTop = 1; colNumTop <= rowNumTop * 2 - 1; colNumTop++) {
-            rowOfFigure += `${symbol}`;
-          }
-          figure.push(rowOfFigure);
-          rowOfFigure = "";
-        }
-        for (let rowNumBottom = height / 2; rowNumBottom >= 1; rowNumBottom--) {
-          for (let colNumBottom = 1; colNumBottom <= rowNumBottom * 2 - 1; colNumBottom++) {
-            rowOfFigure += `${symbol}`;
-          }
-          figure.push(rowOfFigure);
-          rowOfFigure = "";
-        }
+    } else if (shape === Shape.DIAMOND) {
+    if (height % 2 == 1) {
+      for (let numRowTop = 1; numRowTop <= height / 2 + 1; numRowTop++) {
+        const numCols = numRowTop * 2 - 1;
+        const row = Array.from({ length: numCols }, () => symbol).join('');
+        figures.push(row);
       }
-
+      for (let rowNumBottom = height / 2; rowNumBottom >= 1; rowNumBottom--) {
+        const numCols = rowNumBottom * 2 - 2;
+        const row = Array.from({ length: numCols }, () => symbol).join('');
+        figures.push(row);
+      }
+    } else {
+      for (let rowNumTop = 1; rowNumTop <= height / 2; rowNumTop++) {
+        const numCols = rowNumTop * 2 - 1;
+        const row = Array.from({ length: numCols }, () => symbol).join('');
+        figures.push(row);
+      }
+      for (let rowNumBottom = height / 2; rowNumBottom >= 1; rowNumBottom--) {
+        const numCols = rowNumBottom * 2 - 1;
+        const row = Array.from({ length: numCols }, () => symbol).join('');
+        figures.push(row);
+      }
+    }
       return (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          {figure.map((row, index) => (
-            <div
-              style={{ color: color, backgroundColor: "transparent" }}
-              key={index}
-            >
-              {row}
-            </div>
-          ))}
-        </div>
+        <Figure figures={figures} color={color} />
       );
     }
   };
@@ -240,9 +176,9 @@ const CreateNew = () => {
                 onChange={handleShapeChange}
               >
                 <option value="">Choose shape</option>
-                <option value="Perfect Triangle">Perfect Triangle</option>
-                <option value="Diamond">Diamond</option>
-                <option value="Rectangle">Rectangle</option>
+                <option value={Shape.PERFECT_TRIANGLE}>Perfect Triangle</option>
+                <option value={Shape.DIAMOND}>Diamond</option>
+                <option value={Shape.RECTANGLE}>Rectangle</option>
               </select>
             </div>
             <div className="col-md-6">
