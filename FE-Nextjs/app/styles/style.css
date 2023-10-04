@@ -612,3 +612,17 @@ body {
   font-weight: 700;
   line-height: 22px; /* 137.5% */
 }
+
+.draw-button {
+  justify-content: center;
+}
+
+.figure {
+  background-color: transparent;
+}
+
+.figure-background {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

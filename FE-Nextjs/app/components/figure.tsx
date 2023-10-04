@@ -1,28 +1,16 @@
 import React from "react";
-
-interface FigureProps {
-  figures: string[];
-  color: string;
-}
+import { FigureProps } from "../utils/iProps";
+import { getValidArray } from "../utils/isArray";
 
 const Figure: React.FC<FigureProps> = ({ figures, color }) => {
   return (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          {figures.map((row, index) => (
-            <div
-              style={{ color: color, backgroundColor: "transparent" }}
-              key={index}
-            >
-              {row}
-            </div>
-          ))}
+    <div className="figure-background">
+      {getValidArray(figures).map((row, index) => (
+        <div className="figure" style={{ color: color }} key={index}>
+          {row}
         </div>
-      );
-}
+      ))}
+    </div>
+  );
+};
 export default Figure;
