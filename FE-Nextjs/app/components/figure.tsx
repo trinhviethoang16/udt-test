@@ -1,8 +1,13 @@
 import React from "react";
-import { FigureProps } from "../utils/iProps";
 import { getValidArray } from "../utils/isArray";
 
-const Figure: React.FC<FigureProps> = ({ figures, color }) => {
+interface FigureProps {
+  figures: string[];
+  color: string;
+}
+
+const Figure = (props: FigureProps) => {
+  const { figures, color } = props;
   return (
     <div className="figure-background">
       {getValidArray(figures).map((row, index) => (
@@ -12,5 +17,5 @@ const Figure: React.FC<FigureProps> = ({ figures, color }) => {
       ))}
     </div>
   );
-};
+}
 export default Figure;

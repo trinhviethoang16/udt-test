@@ -1,7 +1,14 @@
 import React from "react";
-import { InputFieldProps } from "../utils/iProps";
 
-const InputField: React.FC<InputFieldProps> = ({ id, name, placeholder, onChange }) => {
+interface InputFieldProps {
+  id: string;
+  name: string;
+  placeholder: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const InputField = (props: InputFieldProps) => {
+  const { id, name, placeholder, onChange } = props;
   return (
     <input type="text" className="form-control" id={id} name={name} placeholder={placeholder} onChange={onChange}/>
   );

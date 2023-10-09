@@ -1,16 +1,21 @@
 "use client";
 import React, { ChangeEvent, FormEvent, useState } from "react";
-import BackToList from "../components/backToList";
-import SelectField from "../components/selectField";
-import LabelField from "../components/labelField";
-import InputField from "../components/inputField";
-import { API_URL } from "../utils/url";
 import { Shape } from "../utils/enum";
-import DrawFigure from "../components/drawFigure";
+import DrawFigure from "../components/DrawFigure";
+import InputField from "../components/InputField";
+import LabelField from "../components/LabelField";
+import SelectField from "../components/SelectField";
+import BackToList from "../components/BackToList";
 
-function CreateNew() {
+const shapeOptions = [
+  { value: Shape.PERFECT_TRIANGLE, label: "Perfect Triangle" },
+  { value: Shape.DIAMOND, label: "Diamond" },
+  { value: Shape.RECTANGLE, label: "Rectangle" },
+];
+
+const CreateNew = () => {
   const [selectedShape, setSelectedShape] = useState<Shape | undefined>();
-  function handleShapeChange(e: ChangeEvent<HTMLSelectElement>) {
+  function changeShape(e: ChangeEvent<HTMLSelectElement>) {
     const value = e.target.value as Shape;
     setSelectedShape(value);
     setFormData({
@@ -26,7 +31,7 @@ function CreateNew() {
     measurement: 0,
   });
 
-  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+  function handleFieldChange(e: ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -34,10 +39,10 @@ function CreateNew() {
     });
   }
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleFormSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
-      const response = await fetch(`${API_URL}/figures/create`, {
+      const response = await fetch(`${process.env.API_URL}/figures/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -65,22 +70,22 @@ function CreateNew() {
           <div></div>
         </div>
         <div className="create-form">
-          <form onSubmit={handleSubmit} className="row g-3">
+          <form onSubmit={handleFormSubmit} className="row g-3">
             <div className="col-md-6">
               <LabelField htmlFor="symbol" name="Symbol" />
-              <InputField id="symbol" name="symbol" placeholder="Ex: &" onChange={handleChange}/>
+              <InputField id="symbol" name="symbol" placeholder="Ex: &" onChange={handleFieldChange}/>
             </div>
             <div className="col-md-6">
               <LabelField htmlFor="shape" name="State" />
-              <SelectField name="shape" id="shape" value={selectedShape} onChange={handleShapeChange}/>
+              <SelectField name="shape" id="shape" value={selectedShape} options={shapeOptions} onChange={changeShape}/>
             </div>
             <div className="col-md-6">
               <LabelField htmlFor="color" name="Color" />
-              <InputField id="color" name="color" placeholder="Ex: #111111" onChange={handleChange}/>
+              <InputField id="color" name="color" placeholder="Ex: #111111" onChange={handleFieldChange}/>
             </div>
             <div className="col-md-6">
               <LabelField htmlFor="measurement" name="Measurement" />
-              <InputField id="measurement" name="measurement" placeholder="Ex: 7" onChange={handleChange}/>
+              <InputField id="measurement" name="measurement" placeholder="Ex: 7" onChange={handleFieldChange}/>
             </div>
             <DrawFigure
               color={"#" + formData.color}

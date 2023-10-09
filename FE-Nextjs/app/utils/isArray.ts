@@ -1,5 +1,5 @@
 export function getValidArray<T>(array?: T[]): T[] {
-    if (array === undefined) {
+    if (array === undefined || array === null) {
       return []
     }
     return checkValidArray(array) ? array : []

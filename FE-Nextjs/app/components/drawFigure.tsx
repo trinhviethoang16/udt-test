@@ -1,10 +1,17 @@
 import React from "react";
 import { Shape } from "../utils/enum";
-import { DrawFigureProps } from "../utils/iProps";
-import Figure from "./figure";
 import { getValidArray } from "../utils/isArray";
+import Figure from "./Figure";
 
-const DrawFigure: React.FC<DrawFigureProps> = ({ color, symbol, measurement, shape }) => {
+interface DrawFigureProps {
+  color: string;
+  symbol: string;
+  measurement: number;
+  shape: Shape | undefined;
+}
+
+const DrawFigure = (props: DrawFigureProps) => {
+  const { color, symbol, measurement, shape } = props;
   let figures: string[] = [];
 
   function drawDiamondFigure(figures: string[], symbol: string, height: number) {
@@ -45,21 +52,26 @@ const DrawFigure: React.FC<DrawFigureProps> = ({ color, symbol, measurement, sha
       figures.push(row);
     }
   }
-
-  if (shape === Shape.RECTANGLE) {
-    figures = Array.from({ length: measurement }, () => {
-      return Array.from({ length: measurement }, () => symbol).join("");
-    });
-  } else if (shape === Shape.PERFECT_TRIANGLE) {
-    figures = Array.from({ length: measurement }, (_, rowIndex) => {
-      const numCols = rowIndex * 2 + 1;
-      const row = Array.from({ length: numCols }, () => symbol).join("");
-      return row;
-    });
-  } else if (shape === Shape.DIAMOND) {
-    const newArray = drawDiamondFigure(figures, symbol, measurement);
-    const validFigures = getValidArray(newArray);
-    return <Figure figures={validFigures} color={color} />;
+  switch (shape) {
+    case Shape.RECTANGLE:
+      figures = Array.from({ length: measurement }, () => {
+        return Array.from({ length: measurement }, () => symbol).join("");
+      });
+      break;
+    case Shape.PERFECT_TRIANGLE:
+      figures = Array.from({ length: measurement }, (_, rowIndex) => {
+        const numCols = rowIndex * 2 + 1;
+        const row = Array.from({ length: numCols }, () => symbol).join("");
+        return row;
+      });
+      break;
+    case Shape.DIAMOND:
+      const newArray = drawDiamondFigure(figures, symbol, measurement);
+      const validFigures = getValidArray(newArray);
+      return <Figure figures={validFigures} color={color} />;
+    default:
+      figures = [];
+      break;
   }
   const validFigures = getValidArray(figures);
   return <Figure figures={validFigures} color={color} />;
