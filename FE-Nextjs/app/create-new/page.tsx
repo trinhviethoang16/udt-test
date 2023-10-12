@@ -16,11 +16,11 @@ const shapeOptions = [
 const CreateNew = () => {
   const [selectedShape, setSelectedShape] = useState<Shape | undefined>();
   function changeShape(e: ChangeEvent<HTMLSelectElement>) {
-    const value = e.target.value as Shape;
-    setSelectedShape(value);
+    const shape = e.target.value as Shape;
+    setSelectedShape(shape);
     setFormData({
       ...formData,
-      shape: value,
+      shape: shape,
     });
   }
 

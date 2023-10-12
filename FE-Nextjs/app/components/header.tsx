@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-sync-scripts */
 import Link from "next/link";
 import React from "react";
 

@@ -21,7 +21,7 @@ export default function Home() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://127.0.0.1:3000/users', {
+      const response = await fetch(`${process.env.API_URL}/users`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
