@@ -65,7 +65,7 @@ const CreateNew = () => {
         <div className="title-holder">
           <BackToList />
           <div className="create-title col-8">
-            <p>New Draw</p>
+            <p>Hello</p>
           </div>
           <div></div>
         </div>
