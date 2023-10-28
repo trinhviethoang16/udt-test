@@ -36,7 +36,7 @@ const SignUp = () => {
   }
 
     try {
-      const response = await fetch('http://127.0.0.1:3000/users/create', {
+      const response = await fetch(`${process.env.API_URL}/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
