@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import BackToList from '../components/BackToList';
 
 const EditPage = () => {
     return (
@@ -34,7 +35,7 @@ const EditPage = () => {
                   </defs>
                 </svg>
               </span>
-              <span>Back to list</span>
+              <BackToList />
             </div>
           </Link>
           <div className="edit-title col-8">
