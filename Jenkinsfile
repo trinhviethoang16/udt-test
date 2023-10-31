@@ -9,12 +9,16 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'cd fe-nextjs && docker build -t fe-nextjs .'
+                dir('FE-Nextjs') {
+                    sh 'docker build -t fe-nextjs .'
+                }
             }
         }
         stage('Deploy') {
             steps {
-                sh 'cd fe-nextjs && docker-compose up -d'
+                dir('FE-Nextjs') {
+                    sh 'docker-compose up -d'
+                }
             }
         }
     }
