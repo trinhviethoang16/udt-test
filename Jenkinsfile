@@ -3,8 +3,10 @@ pipeline {
     stages {
         stage('Build') { 
             steps {
-                sh 'docker build -t fe-nextjs .' 
-                sh 'docker-compose up --build'
+                dir('FE-Nextjs') {
+                    sh 'docker build -t fe-nextjs .' 
+                    sh 'docker-compose up --build'
+                }
             }
         }
         stage('Tag') { 
