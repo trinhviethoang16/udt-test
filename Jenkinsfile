@@ -1,12 +1,17 @@
 pipeline {
     agent any 
     stages {
-        stage('Build') { 
+        // stage('Build') { 
+        //     steps {
+        //         dir('FE-Nextjs') {
+        //             sh 'docker build -t fe-nextjs .' 
+        //             sh 'docker-compose up --build'
+        //         }
+        //     }
+        // }
+        stage('Clone') { 
             steps {
-                dir('FE-Nextjs') {
-                    sh 'docker build -t fe-nextjs .' 
-                    sh 'docker-compose up --build'
-                }
+                git branch: 'main', url: 'https://github.com/trinhviethoang16/udt-test.git'
             }
         }
         stage('Tag') { 
