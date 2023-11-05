@@ -1,17 +1,12 @@
 pipeline {
     agent any 
     stages {
-        // stage('Build') { 
-        //     steps {
-        //         dir('FE-Nextjs') {
-        //             sh 'docker build -t fe-nextjs .' 
-        //             sh 'docker-compose up --build'
-        //         }
-        //     }
-        // }
-        stage('Clone') { 
+        stage('Build') { 
             steps {
-                git branch: 'main', url: 'https://github.com/trinhviethoang16/udt-test.git'
+                dir('FE-Nextjs') {
+                    sh 'docker build -t fe-nextjs .' 
+                    sh 'docker-compose up --build'
+                }
             }
         }
         stage('Tag') { 
@@ -20,7 +15,7 @@ pipeline {
             }
         }
         stage('Push') { 
-            steps {
+            steps { 
                 withCredentials([usernamePassword(credentialsId: 'dockerHubCredentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh 'docker login -u $USERNAME -p $PASSWORD'
                     sh 'docker push trinhviethoang16/fe-nextjs' 
@@ -30,7 +25,7 @@ pipeline {
         stage('Deploy') { 
             steps {
                 sshagent(credentials: ['vagrant-ssh']) {
-                    sh 'ssh vagrant@your-vagrant-ip "docker pull trinhviethoang16/fe-nextjs && docker run -d -p 3500:3000 trinhviethoang16/fe-nextjs"'
+                    sh 'ssh vagrant@192.168.21.128 "docker pull trinhviethoang16/fe-nextjs && docker stop fe-nextjs || true && docker rm fe-nextjs || true && docker run -d -p 3500:3000 --name fe-nextjs trinhviethoang16/fe-nextjs"'
                 }
             }
         }
